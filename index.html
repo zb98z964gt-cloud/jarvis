@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050d18">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="JARVIS">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>J.A.R.V.I.S.</title>
+<style>
+:root{color-scheme:dark;--cyan:#54dfff;--blue:#168dff;--muted:#83a9c2}
+*{box-sizing:border-box}body{margin:0;min-height:100svh;background:radial-gradient(ellipse at 50% 42%,#102b43 0,#071522 42%,#030811 100%);color:#e7f8ff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;display:flex;justify-content:center}
+.app{width:min(100%,520px);min-height:100svh;padding:calc(env(safe-area-inset-top) + 24px) 22px calc(env(safe-area-inset-bottom) + 22px);display:flex;flex-direction:column;align-items:center}
+.brand{letter-spacing:.42em;font-size:12px;color:var(--cyan);text-shadow:0 0 14px #24bfff;margin-top:6px}.sub{font-size:10px;letter-spacing:.2em;color:#789ab1;margin-top:8px}
+.core-wrap{width:min(78vw,310px);aspect-ratio:1;margin:42px auto 26px;position:relative;display:grid;place-items:center}
+.ring{position:absolute;border:1px solid rgba(73,207,255,.45);border-radius:50%;box-shadow:0 0 20px #0a9bd733,inset 0 0 20px #0a9bd722}
+.r1{inset:0;border-style:dashed;animation:spin 28s linear infinite}.r2{inset:8%;border-width:2px;border-color:#48cfff88;animation:spin 16s linear infinite reverse}.r3{inset:19%;border-style:dotted;animation:spin 22s linear infinite}.core{width:48%;aspect-ratio:1;border-radius:50%;border:2px solid #71e5ff;background:radial-gradient(circle at 40% 35%,#b9f7ff 0,#36c7ff 12%,#0873b8 35%,#041b31 72%);box-shadow:0 0 20px #28bfff,0 0 65px #168dff77,inset 0 0 25px #b4f7ff88;display:grid;place-items:center}
+.core span{font-size:clamp(30px,9vw,48px);font-weight:200;color:#eaffff;text-shadow:0 0 15px white}
+.tick{position:absolute;width:8px;height:8px;border-radius:50%;background:#8beaff;box-shadow:0 0 12px #44cfff}
+.t1{top:8%;left:49%}.t2{bottom:8%;left:49%}.t3{left:8%;top:49%}.t4{right:8%;top:49%}
+.status{font-size:12px;letter-spacing:.18em;color:var(--cyan);min-height:20px;text-align:center}
+.status.listening{color:#a4ffdf;text-shadow:0 0 12px #4dffbf}
+.mic{margin:22px 0 14px;width:76px;height:76px;border-radius:50%;border:1px solid #69dfff;background:linear-gradient(145deg,#123d5a,#061827);color:#dffaff;font-size:28px;box-shadow:0 0 24px #169bdb66;cursor:pointer}
+.mic:active{transform:scale(.96)}.hint{font-size:11px;color:#7799ae;text-align:center;line-height:1.5}
+.panel{width:100%;margin-top:25px;border:1px solid #24617b88;background:#071522bb;border-radius:16px;padding:15px;box-shadow:0 0 25px #007bb51a}
+.label{font-size:10px;letter-spacing:.2em;color:#64cdec;margin-bottom:9px}
+.reply{font-size:14px;line-height:1.55;color:#d8eff9;min-height:42px;white-space:pre-wrap}
+.controls{display:flex;gap:8px;width:100%;margin-top:12px}
+input{min-width:0;flex:1;background:#06111d;border:1px solid #28536b;border-radius:12px;padding:13px;color:white;font-size:14px;outline:none}
+.send{border:1px solid #3aaed4;background:#0c3650;color:#dffaff;border-radius:12px;padding:0 16px;font-weight:600}
+.foot{margin-top:auto;padding-top:22px;color:#57768b;font-size:10px;letter-spacing:.12em;text-align:center}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.ring{animation:none}}
+.gear{position:fixed;top:calc(env(safe-area-inset-top) + 10px);right:14px;background:none;border:1px solid #24617b88;color:#83a9c2;border-radius:10px;width:36px;height:36px;font-size:18px}
+.set{display:none;width:100%;margin-top:12px;border:1px solid #24617b88;background:#071522;border-radius:14px;padding:14px}
+.set.open{display:block}.set p{font-size:12px;line-height:1.5;color:#83a9c2;margin:0 0 10px}
+.set .controls{margin-top:0}
+</style>
+</head>
+<body>
+<button id="gear" class="gear" aria-label="Ayarlar">⚙</button>
+<main class="app">
+  <div class="brand">J.A.R.V.I.S.</div>
+  <div class="sub">KİŞİSEL YAPAY ZEKÂ ARAYÜZÜ</div>
+  <section class="core-wrap" aria-label="JARVIS çekirdeği">
+    <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>
+    <i class="tick t1"></i><i class="tick t2"></i><i class="tick t3"></i><i class="tick t4"></i>
+    <div class="core"><span>J</span></div>
+  </section>
+  <div id="status" class="status">SİSTEM HAZIR</div>
+  <button id="mic" class="mic" aria-label="Konuşmayı başlat">🎙</button>
+  <div class="hint">Konuşmak için mikrofona dokun.<br>İstersen aşağıya yazarak da komut verebilirsin.</div>
+  <section id="set" class="set">
+    <p>Anthropic API anahtarını gir (console.anthropic.com). Anahtar yalnızca bu cihazın tarayıcısında saklanır.</p>
+    <div class="controls"><input id="key" type="password" placeholder="sk-ant-..." autocomplete="off" autocapitalize="off" spellcheck="false"><button id="save" class="send">Kaydet</button></div>
+  </section>
+  <section class="panel">
+    <div class="label">JARVIS YANITI</div>
+    <div id="reply" class="reply">JARVIS çevrimiçi. Size nasıl yardımcı olabilirim?</div>
+    <div class="controls">
+      <input id="command" type="text" placeholder="Bir komut yaz..." autocomplete="off">
+      <button id="send" class="send">Gönder</button>
+    </div>
+  </section>
+  <div class="foot">VOICE INTERFACE · TURKISH · AI</div>
+</main>
+<script>
+const MODEL='claude-sonnet-5-5';
+const statusEl=document.getElementById('status'),replyEl=document.getElementById('reply'),mic=document.getElementById('mic'),input=document.getElementById('command'),sendBtn=document.getElementById('send'),setEl=document.getElementById('set'),keyEl=document.getElementById('key');
+let history=[],busy=false,unlocked=false;
+function getKey(){try{return localStorage.getItem('jarvis_key')||''}catch(e){return ''}}
+document.getElementById('gear').onclick=()=>{setEl.classList.toggle('open');keyEl.value=getKey()};
+document.getElementById('save').onclick=()=>{try{localStorage.setItem('jarvis_key',keyEl.value.trim())}catch(e){}setEl.classList.remove('open');statusEl.textContent='ANAHTAR KAYDEDİLDİ'};
+if(!getKey()){setEl.classList.add('open');statusEl.textContent='API ANAHTARI GEREKLİ'}
+
+function unlockSpeech(){if(unlocked||!('speechSynthesis' in window))return;unlocked=true;try{const u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u)}catch(e){}}
+function speak(text){
+  if(!('speechSynthesis' in window))return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);u.lang='tr-TR';u.rate=1;u.pitch=.92;
+  const tr=speechSynthesis.getVoices().find(v=>v.lang&&v.lang.toLowerCase().replace('_','-').startsWith('tr'));
+  if(tr)u.voice=tr;
+  u.onstart=()=>{statusEl.textContent='KONUŞUYOR'};
+  u.onend=()=>{if(!busy)statusEl.textContent='SİSTEM HAZIR'};
+  speechSynthesis.speak(u);
+}
+function systemPrompt(){
+  const now=new Intl.DateTimeFormat('tr-TR',{dateStyle:'full',timeStyle:'short'}).format(new Date());
+  return 'Sen JARVIS adında, Türkçe konuşan kişisel bir yapay zekâ asistanısın. Yanıtların sesli okunacak: kısa, doğal ve akıcı cümleler kur; Markdown, madde işareti, emoji ve özel semboller kullanma. Genelde en fazla 3-4 cümle yaz, kullanıcı ayrıntı isterse uzat. Kibar ve özgüvenli, hafif esprili bir üslubun var. Telefonun sistemlerine (alarm, mesaj, arama vb.) erişimin yok; istenirse bunu dürüstçe söyle. Şu anki tarih ve saat: '+now+'.';
+}
+async function answer(raw){
+  const q=raw.trim();if(!q||busy)return;
+  const key=getKey();
+  if(!key){setEl.classList.add('open');statusEl.textContent='API ANAHTARI GEREKLİ';return}
+  busy=true;sendBtn.disabled=true;mic.disabled=true;
+  statusEl.textContent='DÜŞÜNÜYORUM';replyEl.textContent='…';
+  history.push({role:'user',content:q});
+  let text='';
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'content-type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:MODEL,max_tokens:600,stream:true,system:systemPrompt(),messages:history.slice(-20)})});
+    if(!res.ok){
+      let m='';try{m=(await res.json()).error.message}catch(e){}
+      throw new Error(res.status===401?'API anahtarı geçersiz. Ayarlardan kontrol edin.':(m||'Hata '+res.status));
+    }
+    const rd=res.body.getReader(),dec=new TextDecoder();let buf='';
+    while(true){
+      const {done,value}=await rd.read();if(done)break;
+      buf+=dec.decode(value,{stream:true});
+      const lines=buf.split('\n');buf=lines.pop();
+      for(const l of lines){
+        if(!l.startsWith('data:'))continue;
+        try{const j=JSON.parse(l.slice(5));if(j.type==='content_block_delta'&&j.delta&&j.delta.text){text+=j.delta.text;replyEl.textContent=text}}catch(e){}
+      }
+    }
+    text=text.trim();
+    if(!text)throw new Error('Boş yanıt alındı.');
+    replyEl.textContent=text;history.push({role:'assistant',content:text});
+    statusEl.textContent='YANIT HAZIR';speak(text);
+  }catch(e){
+    history.pop();
+    replyEl.textContent=e instanceof TypeError?'Bağlantı kurulamadı. İnternetinizi kontrol edin.':e.message;
+    statusEl.textContent='HATA';
+  }finally{busy=false;sendBtn.disabled=false;mic.disabled=false}
+}
+function submit(){unlockSpeech();const v=input.value;input.value='';answer(v)}
+sendBtn.addEventListener('click',submit);
+input.addEventListener('keydown',e=>{if(e.key==='Enter')submit()});
+
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+if(SR){
+  const rec=new SR();rec.lang='tr-TR';rec.interimResults=false;rec.maxAlternatives=1;
+  rec.onstart=()=>{statusEl.textContent='SİZİ DİNLİYORUM';statusEl.classList.add('listening');mic.textContent='◉'};
+  rec.onend=()=>{statusEl.classList.remove('listening');mic.textContent='🎙';if(statusEl.textContent==='SİZİ DİNLİYORUM')statusEl.textContent='SİSTEM HAZIR'};
+  rec.onerror=e=>{statusEl.classList.remove('listening');mic.textContent='🎙';statusEl.textContent=e.error==='not-allowed'?'MİKROFON İZNİ GEREKLİ':'SES TANIMA KULLANILAMIYOR'};
+  rec.onresult=e=>answer(e.results[0][0].transcript);
+  mic.addEventListener('click',()=>{unlockSpeech();speechSynthesis.cancel();try{rec.start()}catch(e){rec.stop()}});
+}else{mic.addEventListener('click',()=>{statusEl.textContent='BU TARAYICIDA SES TANIMA YOK';input.focus()})}
+if('serviceWorker' in navigator&&location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+</script>
+</body></html>
